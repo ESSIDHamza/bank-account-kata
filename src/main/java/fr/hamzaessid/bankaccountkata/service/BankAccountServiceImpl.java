@@ -5,11 +5,14 @@ import java.util.Objects;
 
 import fr.hamzaessid.bankaccountkata.entity.Account;
 import fr.hamzaessid.bankaccountkata.entity.Customer;
+import fr.hamzaessid.bankaccountkata.exception.AccountInTheRedException;
 import fr.hamzaessid.bankaccountkata.exception.NegativeAmountException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BankAccountServiceImpl implements BankAccountService {
+
+	public static final BigDecimal MINIMUM_BALANCE_WHEN_ACCOUNT_IN_THE_RED = BigDecimal.valueOf(-150);
 
 	@Override
 	public void deposit(Customer customer, Account account, BigDecimal amount) throws NegativeAmountException {
@@ -24,14 +27,18 @@ public class BankAccountServiceImpl implements BankAccountService {
 		}
 		/**
 		 * equivalent in Java 9 or higher to:
-		 * Optional.ofNullable(account.getBalance()).ifPresentOrElse(
-		 * 	balance -> account.setBalance(balance.add(amount)),
-		 * 	() -> account.setBalance(amount)
-		 * );
+		 * Optional.ofNullable(account.getBalance()).ifPresentOrElse( balance ->
+		 * account.setBalance(balance.add(amount)), () ->
+		 * account.setBalance(amount) );
 		 */
 
 		log.info("Customer #{} has deposited {} into his account #{}", customer.getCustomerId(), amount,
 				account.getAccountId());
+	}
+
+	@Override
+	public void withdraw(Customer customer, Account account, BigDecimal amount)
+			throws NegativeAmountException, AccountInTheRedException {
 	}
 
 }

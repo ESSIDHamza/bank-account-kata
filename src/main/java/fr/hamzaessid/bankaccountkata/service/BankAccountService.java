@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import fr.hamzaessid.bankaccountkata.entity.Account;
 import fr.hamzaessid.bankaccountkata.entity.Customer;
+import fr.hamzaessid.bankaccountkata.exception.AccountInTheRedException;
 import fr.hamzaessid.bankaccountkata.exception.NegativeAmountException;
 
 /**
@@ -16,5 +17,8 @@ public interface BankAccountService {
 
 	void deposit(final Customer customer, final Account account, final BigDecimal amount)
 			throws NegativeAmountException;
+
+	void withdraw(final Customer customer, final Account account, final BigDecimal amount)
+			throws NegativeAmountException, AccountInTheRedException;
 
 }
