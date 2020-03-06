@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import fr.hamzaessid.bankaccountkata.entity.Account;
 import fr.hamzaessid.bankaccountkata.entity.Customer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
  * @since 0.0.1
  */
 @AllArgsConstructor
+@Builder
 @Data
 @NoArgsConstructor
 @SuppressWarnings("serial")

@@ -1,18 +1,29 @@
 package fr.hamzaessid.bankaccountkata.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import fr.hamzaessid.bankaccountkata.entity.Account;
 import fr.hamzaessid.bankaccountkata.entity.Customer;
 import fr.hamzaessid.bankaccountkata.exception.AccountInTheRedException;
 import fr.hamzaessid.bankaccountkata.exception.NegativeAmountException;
+import fr.hamzaessid.bankaccountkata.model.History;
+import fr.hamzaessid.bankaccountkata.model.OperationType;
+import fr.hamzaessid.bankaccountkata.util.HistoryHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BankAccountServiceImpl implements BankAccountService {
 
 	private static final BigDecimal MINIMUM_BALANCE_WHEN_ACCOUNT_IN_THE_RED = BigDecimal.valueOf(-150);
+
+	private final HistoryHandler historyHandler;
+
+	// <=> @Inject / @Autowired (Spring 4.3 or higher code style)
+	public BankAccountServiceImpl(final HistoryHandler historyHandler) {
+		this.historyHandler = historyHandler;
+	}
 
 	@Override
 	public void deposit(Customer customer, Account account, BigDecimal amount) throws NegativeAmountException {
@@ -34,6 +45,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 		log.info("Customer #{} has deposited {} into his account #{}", customer.getCustomerId(), amount,
 				account.getAccountId());
+		final History history = History.builder().amount(amount).operationType(OperationType.DEPOSIT)
+				.operationTime(LocalDateTime.now()).account(account).customer(customer).build();
+		this.historyHandler.save(history);
 	}
 
 	@Override
@@ -51,6 +65,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 				account.setBalance(account.getBalance().subtract(amount));
 				log.info("Customer #{} has withdrawn {} from his account #{}", customer.getCustomerId(), amount,
 						account.getAccountId());
+				final History history = History.builder().amount(amount).operationType(OperationType.WITHDRAW)
+						.operationTime(LocalDateTime.now()).account(account).customer(customer).build();
+				this.historyHandler.save(history);
 			}
 		} else {
 			if (amount.compareTo(MINIMUM_BALANCE_WHEN_ACCOUNT_IN_THE_RED.negate()) == 1) {
@@ -60,6 +77,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 				account.setBalance(amount.negate());
 				log.info("Customer #{} has withdrawn {} from his account #{}", customer.getCustomerId(), amount,
 						account.getAccountId());
+				final History history = History.builder().amount(amount).operationType(OperationType.WITHDRAW)
+						.operationTime(LocalDateTime.now()).account(account).customer(customer).build();
+				this.historyHandler.save(history);
 			}
 		}
 	}
