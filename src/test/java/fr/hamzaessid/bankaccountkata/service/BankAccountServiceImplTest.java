@@ -43,7 +43,7 @@ public class BankAccountServiceImplTest {
 
 	@Test
 	public void testWithdraw() throws NegativeAmountException, AccountInTheRedException {
-		final BigDecimal expected = BigDecimal.valueOf(500);
+		final BigDecimal expected = BigDecimal.valueOf(700);
 		// given an account with a balance equal to 1000
 		final Account account = this.mockAccount();
 		// when customer withdraws 300
