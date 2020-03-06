@@ -41,23 +41,13 @@ public class BankAccountServiceImplTest {
 	}
 
 	private Customer mockCustomer() {
-		return Customer.builder()
-				.customerId(1L)
-				.firstName("Hamza")
-				.lastName("ESSID")
-				.dateOfBirth(LocalDate.of(1993, 12, 22))
-				.job("Software Engineer")
-				.account(this.mockAccount())
-				.build();
+		return Customer.builder().customerId(1L).firstName("Hamza").lastName("ESSID")
+				.dateOfBirth(LocalDate.of(1993, 12, 22)).job("Software Engineer").build();
 	}
 
 	private Account mockAccount() {
-		return Account.builder()
-				.accountId(1L)
-				.balance(BigDecimal.valueOf(1000))
-				.iban("FRXX XXXX ...")
-				.holder(this.mockCustomer())
-				.build();
+		return Account.builder().accountId(1L).balance(BigDecimal.valueOf(1000)).iban("FRXX XXXX ...")
+				.holder(this.mockCustomer()).build();
 	}
 
 }
